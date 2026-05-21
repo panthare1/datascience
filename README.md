@@ -12,7 +12,7 @@ The goal of the project is to identify temporal and spatial patterns in emergenc
 
 The dataset used in this project is publicly available from the Lithuanian Open Data Portal:
 
-[Lithuanian Open Data Portal – Emergency Incident Dataset](https://open-data.stat.gov.lt/datasets/LTdata::bendrojo-pagalbos-centro-bpc-gauti-prane%C5%A1imai-numeriu-112/about?utm_source=chatgpt.com)
+[Lithuanian Open Data Portal – Emergency Incident Dataset](https://open-data.stat.gov.lt/datasets/LTdata::bendrojo-pagalbos-centro-bpc-gauti-prane%C5%A1imai-numeriu-112/
 
 The dataset contains approximately **1.97 million records** and includes:
 
