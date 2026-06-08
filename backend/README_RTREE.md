@@ -4,7 +4,7 @@ This document explains how the project uses SQLite's R-Tree extension to make sp
 
 ## The problem
 
-The `events` table contains roughly 1.97 million rows. Every row has a `latitude` and `longitude`. The frontend map asks the backend "give me all events inside the visible map area" several times as the user pans. The query looks like:
+The `events` table contains roughly 1.97 million rows(before clustering). Every row has a `latitude` and `longitude`. The frontend map asks the backend "give me all events inside the visible map area" several times as the user pans. The query looks like:
 
 ```sql
 SELECT * FROM events

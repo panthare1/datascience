@@ -15,7 +15,7 @@ function Stats({ eventType, year }) {
       .then(response => response.json())
       .then(data => setStats(data.data))
       .catch(err => setError(err.message))
-  }, [eventType, year])   // <-- re-fetch whenever filters change
+  }, [eventType, year])
 
   if (error) return <div>Error loading data: {error}</div>
   if (stats === null) return <div>Loading...</div>
@@ -75,6 +75,20 @@ function MapBoundsWatcher({ onBoundsChanged }) {
   return null
 }
 
+function MapClickHandler({ onMapClick }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map) return
+    const listener = map.addListener('click', (e) => {
+      onMapClick({ lat: e.latLng.lat(), lng: e.latLng.lng() })
+    })
+    return () => listener.remove()
+  }, [map, onMapClick])
+
+  return null
+}
+
 function HeatmapCell({ cell, cellSize, maxCount }) {
   const map = useMap()
 
@@ -106,6 +120,110 @@ function HeatmapCell({ cell, cellSize, maxCount }) {
   return null
 }
 
+function PredictionPanel({ prediction, loading, error, onClose }) {
+  if (!prediction && !loading && !error) return null
+
+  const historical = prediction?.historical
+  const predicted = prediction?.predicted
+
+  const histData = historical?.data || []
+  const histMax = histData.length > 0 ? Math.max(...histData.map(d => d.count)) : 0
+
+  const predData = predicted?.data || []
+  const predMax = predData.length > 0 ? Math.max(...predData.map(d => d.probability)) : 0
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '20px',
+      right: '20px',
+      width: '360px',
+      backgroundColor: 'white',
+      padding: '16px',
+      borderRadius: '8px',
+      boxShadow: '0 2px 12px rgba(0, 0, 0, 0.15)',
+      zIndex: 1000,
+      fontFamily: 'sans-serif',
+      maxHeight: '85vh',
+      overflowY: 'auto',
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+        <strong>Incident analysis at this point</strong>
+        <button
+          onClick={onClose}
+          style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: '18px' }}
+        >×</button>
+      </div>
+
+      {loading && <div style={{ fontSize: '13px', color: '#666' }}>Loading...</div>}
+      {error && <div style={{ color: 'red', fontSize: '13px' }}>Error: {error}</div>}
+
+      {prediction && (
+        <>
+          <div style={{ marginBottom: '20px' }}>
+            <div style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '8px' }}>
+              Nearby historical events
+            </div>
+
+            {histData.length === 0 ? (
+              <div style={{ fontSize: '12px', color: '#666' }}>
+                No events within {historical?.radius_m || 500}m of this point.
+              </div>
+            ) : (
+              <>
+                <div style={{ fontSize: '11px', color: '#666', marginBottom: '8px' }}>
+                  Based on <strong>{historical.total.toLocaleString()}</strong> events within {historical.radius_m}m. Top 3 types:
+                </div>
+                {histData.map((item, i) => (
+                  <div key={i} style={{ marginBottom: '8px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+                      <span>{item.type}</span>
+                      <span><strong>{item.count.toLocaleString()}</strong></span>
+                    </div>
+                    <div style={{ height: '7px', backgroundColor: '#eee', borderRadius: '4px', overflow: 'hidden', marginTop: '2px' }}>
+                      <div style={{
+                        height: '100%',
+                        width: `${(item.count / histMax) * 100}%`,
+                        backgroundColor: '#4a90e2',
+                      }} />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+
+          <div style={{ borderTop: '1px solid #eee', marginBottom: '14px' }} />
+
+          <div>
+            <div style={{ fontSize: '13px', fontWeight: 'bold', marginBottom: '8px' }}>
+              Model prediction
+            </div>
+            <div style={{ fontSize: '11px', color: '#666', marginBottom: '8px' }}>
+              From a classifier trained on 1.35M events. Top 3 most likely types:
+            </div>
+            {predData.map((item, i) => (
+              <div key={i} style={{ marginBottom: '8px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+                  <span>{item.type}</span>
+                  <span><strong>{(item.probability * 100).toFixed(1)}%</strong></span>
+                </div>
+                <div style={{ height: '7px', backgroundColor: '#eee', borderRadius: '4px', overflow: 'hidden', marginTop: '2px' }}>
+                  <div style={{
+                    height: '100%',
+                    width: `${(item.probability / predMax) * 100}%`,
+                    backgroundColor: '#e67e22',
+                  }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
 function MapView({ eventType, year }) {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY
   const [events, setEvents] = useState([])
@@ -114,6 +232,10 @@ function MapView({ eventType, year }) {
   const [viewMode, setViewMode] = useState('pins')
   const [cellSize, setCellSize] = useState(0.05)
   const [error, setError] = useState(null)
+
+  const [prediction, setPrediction] = useState(null)
+  const [predictionLoading, setPredictionLoading] = useState(false)
+  const [predictionError, setPredictionError] = useState(null)
 
   useEffect(() => {
     if (!bounds) return
@@ -151,6 +273,28 @@ function MapView({ eventType, year }) {
     }
   }, [bounds, eventType, year, viewMode, cellSize])
 
+  const handleMapClick = ({ lat, lng }) => {
+    setPredictionLoading(true)
+    setPrediction(null)
+    setPredictionError(null)
+
+    const histParams = new URLSearchParams({ lat, lon: lng, radius_m: 500 })
+    const predParams = new URLSearchParams({ lat, lon: lng, month: 6, year: 2022 })
+
+    Promise.all([
+      fetch(`http://127.0.0.1:8000/historical-near-point?${histParams}`).then(r => r.json()),
+      fetch(`http://127.0.0.1:8000/predict?${predParams}`).then(r => r.json()),
+    ])
+      .then(([historical, predicted]) => {
+        setPrediction({ historical, predicted })
+        setPredictionLoading(false)
+      })
+      .catch(err => {
+        setPredictionError(err.message)
+        setPredictionLoading(false)
+      })
+  }
+
   if (!apiKey) return <div>Missing VITE_GOOGLE_MAPS_API_KEY in .env.</div>
   if (error) return <div>Error loading data: {error}</div>
 
@@ -158,6 +302,13 @@ function MapView({ eventType, year }) {
 
   return (
     <div>
+      <PredictionPanel
+        prediction={prediction}
+        loading={predictionLoading}
+        error={predictionError}
+        onClose={() => setPrediction(null)}
+      />
+
       <div style={{ marginBottom: '10px', display: 'flex', gap: '15px', alignItems: 'center' }}>
         <label>
           <input type="radio" name="mode" value="pins"
@@ -194,6 +345,7 @@ function MapView({ eventType, year }) {
           mapId="lt112-map"
         >
           <MapBoundsWatcher onBoundsChanged={setBounds} />
+          <MapClickHandler onMapClick={handleMapClick} />
 
           {viewMode === 'pins' && events.map(event => (
             <AdvancedMarker

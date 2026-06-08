@@ -1,6 +1,15 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware 
 import sqlite3
+import joblib
+from pathlib import Path
+
+# ===== Predictor model loading =====
+script_dir = Path(__file__).parent
+print("Loading predictor model...")
+predictor = joblib.load(script_dir / 'predictor.joblib')
+predictor_classes = joblib.load(script_dir / 'predictor_classes.joblib')
+print(f"  Loaded model with {len(predictor_classes)} classes")
 
 app = FastAPI(title="Lithuania 112 Events API")
 # Allow any origin during development.
@@ -127,3 +136,70 @@ def get_events(
 
     rows = query_db(sql, tuple(params))
     return {"count": len(rows), "data": rows}
+
+@app.get("/predict")
+def predict(lat: float, lon: float, month: int, year: int):
+    """
+    Predict the top-3 most likely incident types at a given location and time.
+    Returns: {"data": [{"type": "...", "probability": 0.xx}, ...]}
+    """
+    import numpy as np
+    
+    # Build a single-row feature array matching v1's training features
+    X = [[lat, lon, month, year]]
+    
+    # predict_proba returns shape (1, n_classes)
+    probabilities = predictor.predict_proba(X)[0]
+    
+    # Get top 3 indices, highest to lowest
+    top3_indices = np.argsort(probabilities)[::-1][:3]
+    
+    # Map to class names + probabilities
+    top3 = [
+        {
+            "type": predictor_classes[i],
+            "probability": float(probabilities[i])
+        }
+        for i in top3_indices
+    ]
+    
+    return {"data": top3}
+
+@app.get("/historical-near-point")
+def historical_near_point(lat: float, lon: float, radius_m: float = 500):
+    """
+    Return counts of incident types within `radius_m` of (lat, lon),
+    using the R-Tree for fast spatial lookup.
+    """
+    # Convert radius in meters to degrees (approximate, fine at Lithuania latitude)
+    # 1 degree latitude ≈ 111 km. 1 degree longitude at 55°N ≈ 64 km.
+    lat_delta = radius_m / 111_000
+    lon_delta = radius_m / 64_000
+
+    sql = """
+        SELECT e.lower_level_incident_type AS type, COUNT(*) AS count
+        FROM events_rtree r
+        JOIN events e ON e.rowid = r.id
+        WHERE r.min_lat >= ? AND r.max_lat <= ?
+          AND r.min_lon >= ? AND r.max_lon <= ?
+        GROUP BY e.lower_level_incident_type
+        ORDER BY count DESC
+        LIMIT 3
+    """
+    params = (
+        lat - lat_delta, lat + lat_delta,
+        lon - lon_delta, lon + lon_delta,
+    )
+    rows = query_db(sql, params)
+
+    # Also get the total count for context
+    total_sql = """
+        SELECT COUNT(*) as total
+        FROM events_rtree r
+        WHERE r.min_lat >= ? AND r.max_lat <= ?
+          AND r.min_lon >= ? AND r.max_lon <= ?
+    """
+    total_row = query_db(total_sql, params)
+    total = total_row[0]['total'] if total_row else 0
+
+    return {"data": rows, "total": total, "radius_m": radius_m}
