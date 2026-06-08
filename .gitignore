@@ -1,0 +1,59 @@
+# ===== Secrets =====
+# Never commit these. Ever.
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# ===== Python =====
+# Virtual environments
+backend/myenv/
+backend/.venv/
+venv/
+.venv/
+
+# Compiled Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ===== Node / Frontend =====
+frontend/node_modules/
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Data files =====
+# Raw data is too large for git and isn't ours to redistribute
+backend/112.csv
+backend/112_clean.csv
+backend/112_final.csv
+backend/events.db
+backend/events_clustered.csv
+*.csv
+*.db
+# If you want to allow specific small CSVs, override below with:
+# !backend/some_small_example.csv
+
+# ===== ML artifacts =====
+*.joblib
+*.pkl
+backend/*.joblib
+
+# ===== Editor / OS =====
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
