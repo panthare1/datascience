@@ -203,3 +203,121 @@ def historical_near_point(lat: float, lon: float, radius_m: float = 500):
     total = total_row[0]['total'] if total_row else 0
 
     return {"data": rows, "total": total, "radius_m": radius_m}
+
+@app.get("/danger-zones")
+def danger_zones(
+    min_lat: float, max_lat: float,
+    min_lon: float, max_lon: float,
+    cell_size: float = 0.05,
+    year: int = None,
+):
+    """
+    Aggregated grid of events tagged as violence or public-order disturbance.
+    """
+    danger_types = (
+        'Smurtas artimoje aplinkoje',
+        'Nusikaltimai asmeniui dabar',
+        'Nusikaltimai asmeniui anksčiau',
+        'Smurtas/prievartavimas',
+        'Pasikorimas ir pasismaugimas',
+        'Ginklai, šaudmenys, karo laikų sprogmenys',
+        'Sprogimas ar sprogimo grėsmė',
+        'Bandymas nusižudyti (savižudybės pavojus)',
+        'Įvairūs viešosios tvarkos pažeidimai',
+    )
+
+    # Build the IN clause placeholders
+    placeholders = ','.join(['?'] * len(danger_types))
+
+    sql = f"""
+        SELECT
+            ROUND(e.latitude  / ?, 0) * ? AS cell_lat,
+            ROUND(e.longitude / ?, 0) * ? AS cell_lon,
+            COUNT(*) AS count
+        FROM events_rtree r
+        JOIN events e ON e.rowid = r.id
+        WHERE r.min_lat >= ? AND r.max_lat <= ?
+          AND r.min_lon >= ? AND r.max_lon <= ?
+          AND e.lower_level_incident_type IN ({placeholders})
+    """
+    params = [cell_size, cell_size, cell_size, cell_size,
+              min_lat, max_lat, min_lon, max_lon]
+    params.extend(danger_types)
+
+    if year is not None:
+        sql += " AND e.year = ?"
+        params.append(year)
+
+    sql += " GROUP BY cell_lat, cell_lon"
+
+    rows = query_db(sql, tuple(params))
+    return {"data": rows}
+
+@app.get("/stats/by-month")
+def stats_by_month():
+    """Returns total event count per (year, month) for the time series chart."""
+    sql = """
+        SELECT year, month, COUNT(*) as count
+        FROM events
+        WHERE data_quality_flag = 'ok'
+        GROUP BY year, month
+        ORDER BY year, month
+    """
+    rows = query_db(sql)
+    # Add a 'period' string for chart label (e.g. '2022-03')
+    for row in rows:
+        row['period'] = f"{row['year']}-{row['month']:02d}"
+    return {"data": rows}
+
+
+@app.get("/stats/by-higher-type")
+def stats_by_higher_type():
+    """Returns event count per higher-level type (15 categories)."""
+    sql = """
+        SELECT higher_level_incident_type as type, COUNT(*) as count
+        FROM events
+        WHERE data_quality_flag = 'ok'
+        GROUP BY higher_level_incident_type
+        ORDER BY count DESC
+    """
+    rows = query_db(sql)
+    return {"data": rows}
+
+
+@app.get("/stats/by-year-and-type")
+def stats_by_year_and_type():
+    """Returns counts of top 5 higher-level types broken down by year (for the year-over-year chart)."""
+    # First get the top 5 types overall
+    top_types_sql = """
+        SELECT higher_level_incident_type as type
+        FROM events
+        WHERE data_quality_flag = 'ok'
+        GROUP BY higher_level_incident_type
+        ORDER BY COUNT(*) DESC
+        LIMIT 5
+    """
+    top_types = [r['type'] for r in query_db(top_types_sql)]
+
+    # Then for each year, count events per top type
+    placeholders = ','.join(['?'] * len(top_types))
+    sql = f"""
+        SELECT year, higher_level_incident_type as type, COUNT(*) as count
+        FROM events
+        WHERE data_quality_flag = 'ok'
+          AND higher_level_incident_type IN ({placeholders})
+        GROUP BY year, higher_level_incident_type
+        ORDER BY year, type
+    """
+    rows = query_db(sql, tuple(top_types))
+
+    # Pivot the data so each row is one year with all types as columns (recharts likes this shape)
+    years = sorted(set(r['year'] for r in rows))
+    pivoted = []
+    for year in years:
+        row = {'year': str(year)}
+        for t in top_types:
+            count = next((r['count'] for r in rows if r['year'] == year and r['type'] == t), 0)
+            row[t] = count
+        pivoted.append(row)
+
+    return {"data": pivoted, "types": top_types}
