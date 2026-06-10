@@ -18,9 +18,33 @@ pip install fastapi uvicorn
 Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 uvicorn server:app --reload
 (Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& c:\Users\Vartotojas\Desktop\things\school\projecct\tele\myenv\Scripts\Activate.ps1)
-
+cd C:\Users\Vartotojas\Desktop\things\school\projecct\backend
+.\myenv\Scripts\Activate.ps1
 
 API-AIzaSyAsdFbJpil_Ci4sVgIQCNsZFAOB1S7ihCU
 
 
 events.db - journal - probably to remove
+
+The actual mechanical difference
+Heatmap shows all events in the visible area, aggregated by cell, colored by count.
+
+Includes everything: medical, police, fire, traffic, environmental, wildlife, etc.
+Colors scale to "where is anything happening?"
+Answers: "Where is the 112 system busy?"
+
+Danger zones shows only specific incident categories in the same grid, colored by count.
+
+Includes only: domestic violence, crimes against person (now + earlier), violence/rape, hanging, weapons, explosions, suicide attempts, public order violations
+Colors scale to "where is this subset happening?"
+Answers: "Where do disturbance- and violence-type calls concentrate?"
+
+
+HOW TO START:
+open the backend terminal
+.\myenv\Scripts\Activate.ps1
+download requirments.txt
+uvicorn server:app --reload
+open the frontend terminal
+npm run dev
+the website should be at: http://localhost:5175/
