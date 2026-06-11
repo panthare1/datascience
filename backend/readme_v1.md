@@ -48,3 +48,20 @@ uvicorn server:app --reload
 open the frontend terminal
 npm run dev
 the website should be at: http://localhost:5175/
+
+1. Development server (what you've been using)
+When you ran npm run dev, that was Vite. It:
+
+Serves your code at http://localhost:5173
+Hot reload: when you save App.jsx, the browser updates immediately without you reloading
+Resolves imports: when you write import { useState } from 'react', Vite finds React in node_modules and serves it
+
+The hot reload is the magic — it's why editing your code feels instant.
+2. Production builder
+When you eventually run npm run build (you haven't yet), Vite:
+
+Bundles all your JavaScript files into a few optimized files
+Minifies the code (removes whitespace, shortens variable names)
+Tree-shakes (removes unused code from libraries you import)
+Optimizes images and CSS
+Outputs a dist/ folder you can deploy anywhere
