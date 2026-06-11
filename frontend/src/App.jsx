@@ -2,6 +2,135 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 import { APIProvider, Map, AdvancedMarker, useMap } from '@vis.gl/react-google-maps'
 
+const CITIES = [
+  { name: 'Vilnius',    lat: 54.687, lon: 25.279 },
+  { name: 'Kaunas',     lat: 54.898, lon: 23.903 },
+  { name: 'Klaipėda',   lat: 55.708, lon: 21.131 },
+  { name: 'Šiauliai',   lat: 55.934, lon: 23.314 },
+  { name: 'Panevėžys',  lat: 55.733, lon: 24.357 },
+  { name: 'Alytus',     lat: 54.396, lon: 24.045 },
+  { name: 'Marijampolė', lat: 54.555, lon: 23.354 },
+]
+
+function Compare() {
+  const [cityA, setCityA] = useState('Vilnius')
+  const [cityB, setCityB] = useState('Kaunas')
+  const [statsA, setStatsA] = useState(null)
+  const [statsB, setStatsB] = useState(null)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    
+  Promise.all([
+    fetch(`http://127.0.0.1:8000/region-stats?city=${encodeURIComponent(cityA)}`).then(r => r.json()),
+    fetch(`http://127.0.0.1:8000/region-stats?city=${encodeURIComponent(cityB)}`).then(r => r.json()),
+  ])
+      .then(([a, b]) => { setStatsA(a); setStatsB(b) })
+      .catch(err => setError(err.message))
+  }, [cityA, cityB])
+
+  if (error) return <div>Error: {error}</div>
+  if (!statsA || !statsB) return <div>Loading...</div>
+
+  // Merge time series for the line chart
+  const allPeriods = new Set([
+    ...statsA.monthly.map(r => r.period),
+    ...statsB.monthly.map(r => r.period),
+  ])
+  const mergedMonthly = Array.from(allPeriods).sort().map(period => ({
+    period,
+    [cityA]: statsA.monthly.find(r => r.period === period)?.count ?? null,
+    [cityB]: statsB.monthly.find(r => r.period === period)?.count ?? null,
+  }))
+
+  return (
+    <div>
+      <h2 style={{ marginTop: 0, marginBottom: '8px', color: '#1a202c' }}>Compare regions</h2>
+      <p style={{ marginTop: 0, marginBottom: '24px', color: '#718096', fontSize: '14px' }}>
+        Pick two Lithuanian cities and compare their emergency event profiles. Each city is defined as a 10 km radius around its center.
+      </p>
+
+      {/* City pickers */}
+      <div style={{ display: 'flex', gap: '24px', marginBottom: '32px' }}>
+        <label>
+          City A:{' '}
+          <select value={cityA} onChange={e => setCityA(e.target.value)}>
+            {CITIES.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+          </select>
+        </label>
+
+        <label>
+          City B:{' '}
+          <select value={cityB} onChange={e => setCityB(e.target.value)}>
+            {CITIES.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+          </select>
+        </label>
+      </div>
+
+      {/* Total counts side by side */}
+      <div style={{ display: 'flex', gap: '24px', marginBottom: '40px' }}>
+        <div style={{ flex: 1, padding: '20px', border: '1px solid #e2e8f0', borderRadius: '6px', textAlign: 'center' }}>
+          <div style={{ fontSize: '13px', color: '#718096', marginBottom: '4px' }}>{cityA}</div>
+          <div style={{ fontSize: '32px', fontWeight: 600, color: '#4a90e2' }}>
+            {statsA.total.toLocaleString()}
+          </div>
+          <div style={{ fontSize: '12px', color: '#718096' }}>total events</div>
+        </div>
+        <div style={{ flex: 1, padding: '20px', border: '1px solid #e2e8f0', borderRadius: '6px', textAlign: 'center' }}>
+          <div style={{ fontSize: '13px', color: '#718096', marginBottom: '4px' }}>{cityB}</div>
+          <div style={{ fontSize: '32px', fontWeight: 600, color: '#e67e22' }}>
+            {statsB.total.toLocaleString()}
+          </div>
+          <div style={{ fontSize: '12px', color: '#718096' }}>total events</div>
+        </div>
+      </div>
+
+      {/* Top 5 types side by side */}
+      <div style={{ marginBottom: '40px' }}>
+        <h3 style={{ marginBottom: '16px', fontSize: '16px', color: '#2d3748' }}>Top 5 incident categories</h3>
+        <div style={{ display: 'flex', gap: '24px' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', color: '#718096', marginBottom: '8px' }}>{cityA}</div>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={statsA.top_types} layout="vertical" margin={{ left: 100, right: 20 }}>
+                <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} />
+                <YAxis type="category" dataKey="type" tick={{ fontSize: 10 }} width={100} />
+                <Tooltip formatter={v => v.toLocaleString()} />
+                <Bar dataKey="count" fill="#4a90e2" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: '13px', color: '#718096', marginBottom: '8px' }}>{cityB}</div>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={statsB.top_types} layout="vertical" margin={{ left: 100, right: 20 }}>
+                <XAxis type="number" tick={{ fontSize: 11 }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} />
+                <YAxis type="category" dataKey="type" tick={{ fontSize: 10 }} width={100} />
+                <Tooltip formatter={v => v.toLocaleString()} />
+                <Bar dataKey="count" fill="#e67e22" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Time series, two lines */}
+      <div>
+        <h3 style={{ marginBottom: '16px', fontSize: '16px', color: '#2d3748' }}>Events per month</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={mergedMonthly} margin={{ top: 10, right: 30, left: 0, bottom: 30 }}>
+            <XAxis dataKey="period" tick={{ fontSize: 11 }} angle={-45} textAnchor="end" height={60} />
+            <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `${(v/1000).toFixed(0)}k`} />
+            <Tooltip formatter={v => v?.toLocaleString() ?? '—'} />
+            <Legend wrapperStyle={{ fontSize: '12px' }} />
+            <Line type="monotone" dataKey={cityA} stroke="#4a90e2" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
+            <Line type="monotone" dataKey={cityB} stroke="#e67e22" strokeWidth={2} dot={{ r: 3 }} connectNulls={false} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  )
+}
 
 function Stats({ eventType, year }) {
   const [stats, setStats] = useState(null)
@@ -652,6 +781,7 @@ function App() {
             <nav style={{ marginBottom: '20px', display: 'flex', gap: '20px' }}>
               <Link to="/stats" style={{ color: '#4a90e2', textDecoration: 'none', fontWeight: 500 }}>Stats</Link>
               <Link to="/analytics" style={{ color: '#4a90e2', textDecoration: 'none', fontWeight: 500 }}>Analytics</Link>
+              <Link to="/compare" style={{ color: '#4a90e2', textDecoration: 'none', fontWeight: 500 }}>Compare</Link>
               <Link to="/map" style={{ color: '#4a90e2', textDecoration: 'none', fontWeight: 500 }}>Map</Link>
             </nav>
 
@@ -681,6 +811,7 @@ function App() {
               <Route path="/" element={<Stats eventType={eventType} year={year} />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/stats" element={<Stats eventType={eventType} year={year} />} />
+              <Route path="/compare" element={<Compare />} />
               <Route path="/map" element={<MapView eventType={eventType} year={year} />} />
             </Routes>
           </div>

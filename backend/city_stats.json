@@ -1,0 +1,954 @@
+{
+  "Vilnius": {
+    "total": 292106,
+    "top_types": [
+      {
+        "type": "Policijos įvykiai",
+        "count": 159786
+      },
+      {
+        "type": "BPC-GMP",
+        "count": 125273
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 4150
+      },
+      {
+        "type": "SPEC tarnybos",
+        "count": 874
+      },
+      {
+        "type": "Aplinkosauga",
+        "count": 807
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 17317,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 15798,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 16576,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 16693,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 15051,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 16655,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 16316,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 16839,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 14677,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 14831,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 14702,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 19281,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 16468,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 14922,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 16778,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 15899,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 17339,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 15964,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  },
+  "Kaunas": {
+    "total": 141686,
+    "top_types": [
+      {
+        "type": "Policijos įvykiai",
+        "count": 69991
+      },
+      {
+        "type": "BPC-GMP",
+        "count": 62944
+      },
+      {
+        "type": "Konsultacija",
+        "count": 3628
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 2677
+      },
+      {
+        "type": "Aplinkosauga",
+        "count": 726
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 9244,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 8815,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 9016,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 8853,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 7983,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 9038,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 8661,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 8794,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 6625,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 6492,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 6417,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 7873,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 7218,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 6825,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 7564,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 7239,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 7724,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 7305,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  },
+  "Klaipėda": {
+    "total": 106276,
+    "top_types": [
+      {
+        "type": "Policijos įvykiai",
+        "count": 55544
+      },
+      {
+        "type": "BPC-GMP",
+        "count": 41677
+      },
+      {
+        "type": "Konsultacija",
+        "count": 4482
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 2217
+      },
+      {
+        "type": "Aplinkosauga",
+        "count": 847
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 6766,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 6117,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 6816,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 6522,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 5723,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 6396,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 6429,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 6057,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 5384,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 5798,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 5887,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 6145,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 5132,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 4730,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 5315,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 5583,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 5912,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 5564,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  },
+  "Šiauliai": {
+    "total": 59630,
+    "top_types": [
+      {
+        "type": "Policijos įvykiai",
+        "count": 28471
+      },
+      {
+        "type": "BPC-GMP",
+        "count": 27259
+      },
+      {
+        "type": "Konsultacija",
+        "count": 1741
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 1193
+      },
+      {
+        "type": "BPC TRUKDANTIS",
+        "count": 312
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 3916,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 3770,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 3975,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 3862,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 3383,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 3807,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 3792,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 3821,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 2925,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 2830,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 2872,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 3294,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 2865,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 2652,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 2935,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 2838,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 3107,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 2986,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  },
+  "Panevėžys": {
+    "total": 80668,
+    "top_types": [
+      {
+        "type": "GMP įvykiai",
+        "count": 52121
+      },
+      {
+        "type": "Policijos įvykiai",
+        "count": 26748
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 1116
+      },
+      {
+        "type": "Aplinkosauga",
+        "count": 273
+      },
+      {
+        "type": "BPC-GMP",
+        "count": 201
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 4765,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 4484,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 4824,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 4715,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 4315,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 4409,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 4545,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 4287,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 4126,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 4110,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 4373,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 5069,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 4744,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 3964,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 4549,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 4537,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 4532,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 4320,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  },
+  "Alytus": {
+    "total": 33692,
+    "top_types": [
+      {
+        "type": "BPC-GMP",
+        "count": 17885
+      },
+      {
+        "type": "Policijos įvykiai",
+        "count": 14639
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 821
+      },
+      {
+        "type": "Aplinkosauga",
+        "count": 200
+      },
+      {
+        "type": "Konsultacija",
+        "count": 70
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 1972,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 1795,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 1965,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 1925,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 1790,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 1909,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 1867,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 1927,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 1762,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 1789,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 1842,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 2147,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 2004,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 1707,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 1994,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 1810,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 1725,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 1762,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  },
+  "Marijampolė": {
+    "total": 28857,
+    "top_types": [
+      {
+        "type": "GMP įvykiai",
+        "count": 17015
+      },
+      {
+        "type": "Policijos įvykiai",
+        "count": 11003
+      },
+      {
+        "type": "PGT įvykiai",
+        "count": 517
+      },
+      {
+        "type": "Aplinkosauga",
+        "count": 135
+      },
+      {
+        "type": "BPC-GMP",
+        "count": 82
+      }
+    ],
+    "monthly": [
+      {
+        "year": 2021,
+        "month": 10,
+        "count": 1704,
+        "period": "2021-10"
+      },
+      {
+        "year": 2021,
+        "month": 11,
+        "count": 1644,
+        "period": "2021-11"
+      },
+      {
+        "year": 2021,
+        "month": 12,
+        "count": 1736,
+        "period": "2021-12"
+      },
+      {
+        "year": 2022,
+        "month": 1,
+        "count": 1781,
+        "period": "2022-01"
+      },
+      {
+        "year": 2022,
+        "month": 2,
+        "count": 1620,
+        "period": "2022-02"
+      },
+      {
+        "year": 2022,
+        "month": 3,
+        "count": 1688,
+        "period": "2022-03"
+      },
+      {
+        "year": 2022,
+        "month": 4,
+        "count": 1550,
+        "period": "2022-04"
+      },
+      {
+        "year": 2022,
+        "month": 5,
+        "count": 1637,
+        "period": "2022-05"
+      },
+      {
+        "year": 2022,
+        "month": 6,
+        "count": 1543,
+        "period": "2022-06"
+      },
+      {
+        "year": 2022,
+        "month": 7,
+        "count": 1474,
+        "period": "2022-07"
+      },
+      {
+        "year": 2022,
+        "month": 8,
+        "count": 1626,
+        "period": "2022-08"
+      },
+      {
+        "year": 2022,
+        "month": 12,
+        "count": 1788,
+        "period": "2022-12"
+      },
+      {
+        "year": 2023,
+        "month": 1,
+        "count": 1546,
+        "period": "2023-01"
+      },
+      {
+        "year": 2023,
+        "month": 2,
+        "count": 1299,
+        "period": "2023-02"
+      },
+      {
+        "year": 2023,
+        "month": 3,
+        "count": 1433,
+        "period": "2023-03"
+      },
+      {
+        "year": 2023,
+        "month": 4,
+        "count": 1509,
+        "period": "2023-04"
+      },
+      {
+        "year": 2023,
+        "month": 5,
+        "count": 1711,
+        "period": "2023-05"
+      },
+      {
+        "year": 2023,
+        "month": 6,
+        "count": 1568,
+        "period": "2023-06"
+      }
+    ],
+    "radius_km": 5
+  }
+}

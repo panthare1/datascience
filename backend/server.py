@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import joblib
 from pathlib import Path
+import json
 
 # ===== Predictor model loading =====
 script_dir = Path(__file__).parent
@@ -22,7 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 DB_PATH = "events.db"
-
 def query_db(sql, params=()):#reusable function. connects to db, prevents sql injection, returns list of dicts/clean json
     """Run a SQL query and return rows as a list of dicts."""
     conn = sqlite3.connect(DB_PATH)
@@ -32,6 +32,15 @@ def query_db(sql, params=()):#reusable function. connects to db, prevents sql in
     rows = [dict(row) for row in cur.fetchall()]#return list of dicts/clean json
     conn.close()#close
     return rows
+
+
+# ===== Per-city stats cache =====
+# ===== Per-city stats cache (loaded from disk, see precompute_cities.py) =====
+print("Loading city stats cache...")
+with open(script_dir / 'city_stats.json', 'r', encoding='utf-8') as f:
+    city_stats_cache = json.load(f)
+print(f"  Loaded {len(city_stats_cache)} cities from cache")
+
 
 #endpoints
 @app.get("/")
@@ -321,3 +330,10 @@ def stats_by_year_and_type():
         pivoted.append(row)
 
     return {"data": pivoted, "types": top_types}
+
+@app.get("/region-stats")
+def region_stats(city: str):
+    """Returns pre-computed stats for one of the named cities."""
+    if city not in city_stats_cache:
+        return {"error": f"Unknown city: {city}"}
+    return city_stats_cache[city]
